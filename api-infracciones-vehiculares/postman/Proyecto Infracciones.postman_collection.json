@@ -1,0 +1,220 @@
+{
+  "info": {
+    "_postman_id": "b9f28249-6e7f-44d9-868d-c46c7c4de1ca",
+    "name": "Proyecto Infracciones",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "30638536"
+  },
+  "item": [
+    {
+      "name": "Tipo Infraccion",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:crearTipoInfraccion>\r\n            <codigo>INF-004</codigo>\r\n            <nombre>Semáforo en rojo</nombre>\r\n            <descripcion>Cruzar un semáforo en rojo</descripcion>\r\n            <monto>400.00</monto>\r\n        </tns:crearTipoInfraccion>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:listarTipoInfracciones/>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:eliminarTipoInfraccion>\r\n            <id>4</id>\r\n        </tns:eliminarTipoInfraccion>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "findByID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:consultarTipoInfraccionPorId>\r\n            <id>1</id>\r\n        </tns:consultarTipoInfraccionPorId>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "findByCode",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:consultarTipoInfraccionPorCodigo>\r\n            <codigo>INF-001</codigo>\r\n        </tns:consultarTipoInfraccionPorCodigo>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:actualizarTipoInfraccion>\r\n            <id>1</id>\r\n            <codigo>INF-001</codigo>\r\n            <nombre>Exceso de velocidad</nombre>\r\n            <descripcion>Conducir por encima del límite permitido en zona urbana</descripcion>\r\n            <monto>550.00</monto>\r\n        </tns:actualizarTipoInfraccion>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>"
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

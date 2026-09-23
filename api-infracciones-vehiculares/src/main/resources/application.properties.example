@@ -1,0 +1,10 @@
+spring.application.name=api-infracciones-vehiculares
+
+spring.datasource.url=jdbc:mysql://localhost:3306/infracciones_vehiculares?useSSL=false&serverTimezone=America/Guatemala&allowPublicKeyRetrieval=true
+spring.datasource.username=TU_USUARIO_MYSQL
+spring.datasource.password=TU_CONTRASENA_MYSQL
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.sql.init.mode=never
+
+cxf.servlet.enabled=true
+cxf.servlet.mapping=/services/*
