@@ -1,7 +1,9 @@
 package com.infracciones.apiinfraccionesvehiculares.Config;
 
 import com.infracciones.apiinfraccionesvehiculares.Service.TipoInfraccionService;
+import com.infracciones.apiinfraccionesvehiculares.soap.PersonaSoapService;
 import com.infracciones.apiinfraccionesvehiculares.soap.TipoInfraccionSoapService;
+import com.infracciones.apiinfraccionesvehiculares.soap.UsuarioSoapService;
 import jakarta.xml.ws.Endpoint;
 import org.apache.cxf.Bus;
 import org.apache.cxf.jaxws.EndpointImpl;
@@ -29,6 +31,26 @@ public class SoapConfig {
     ){
         EndpointImpl endpoint = new EndpointImpl(bus, tipoInfraccionSoapService);
         endpoint.publish("/tipoinfracciones");
+        return endpoint;
+    }
+
+    @Bean
+    public Endpoint personaEndpoint(
+            Bus bus,
+            PersonaSoapService personaSoapService
+    ){
+        EndpointImpl endpoint = new EndpointImpl(bus, personaSoapService);
+        endpoint.publish("/personas");
+        return endpoint;
+    }
+
+    @Bean
+    public Endpoint usuarioEndpoint(
+            Bus bus,
+            UsuarioSoapService usuarioSoapService
+    ){
+        EndpointImpl endpoint = new EndpointImpl(bus, usuarioSoapService);
+        endpoint.publish("/usuarios");
         return endpoint;
     }
 }
