@@ -1,16 +1,11 @@
 package com.infracciones.apiinfraccionesvehiculares.Config;
 
-import com.infracciones.apiinfraccionesvehiculares.Service.TipoInfraccionService;
-import com.infracciones.apiinfraccionesvehiculares.soap.PersonaSoapService;
-import com.infracciones.apiinfraccionesvehiculares.soap.TipoInfraccionSoapService;
-import com.infracciones.apiinfraccionesvehiculares.soap.UsuarioSoapService;
+import com.infracciones.apiinfraccionesvehiculares.soap.*;
 import jakarta.xml.ws.Endpoint;
 import org.apache.cxf.Bus;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.infracciones.apiinfraccionesvehiculares.soap.InfraccionService;
 
 @Configuration
 public class SoapConfig {
@@ -51,6 +46,15 @@ public class SoapConfig {
     ){
         EndpointImpl endpoint = new EndpointImpl(bus, usuarioSoapService);
         endpoint.publish("/usuarios");
+        return endpoint;
+    }
+    @Bean
+    public Endpoint vehiculoEndpoint(
+            Bus bus,
+            VehiculoSoapService vehiculoSoapService
+    ){
+        EndpointImpl endpoint = new EndpointImpl(bus, vehiculoSoapService);
+        endpoint.publish("/vehiculos");
         return endpoint;
     }
 }
