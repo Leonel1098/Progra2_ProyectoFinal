@@ -261,12 +261,17 @@ Con el backend corriendo, abre en el navegador (o con `Invoke-WebRequest`) las s
 para confirmar que cada servicio expone su contrato WSDL correctamente:
 
 ```text
-http://localhost:8080/services/infracciones?wsdl
 http://localhost:8080/services/tipoinfracciones?wsdl
+http://localhost:8080/services/personas?wsdl
+http://localhost:8080/services/usuarios?wsdl
+http://localhost:8080/services/vehiculos?wsdl
+http://localhost:8080/services/infracciones?wsdl
 ```
 
-Debe mostrarte un documento XML con las operaciones disponibles (`consultarEstado`,
-`crearTipoInfraccion`, `listarTipoInfracciones`, etc.). Esto **no** significa que puedas usar el
+Cada URL debe mostrarte un documento XML con las operaciones del servicio (por ejemplo
+`crearPersona`, `listarVehiculos`, `registrarInfraccion`). Si el WSDL aparece **sin operaciones**
+(un `portType` vacío), revisa la sección 11 (“Regla importante al agregar un servicio nuevo”).
+Ver el WSDL **no** significa que puedas usar el
 servicio desde el navegador — el WSDL es solo el contrato. Las operaciones reales se invocan con
 peticiones `POST` (ver siguiente paso).
 
@@ -286,6 +291,9 @@ Para usarla:
 2. Ve a **File → Import**.
 3. Selecciona el archivo `Proyecto Infracciones.postman_collection.json`.
 4. Prueba las peticiones ya configuradas (todas son `POST` con `Content-Type: text/xml`).
+
+> La colección puede no incluir todavía los servicios más recientes (personas, usuarios, vehículos
+> e infracciones). Para esos, usa los ejemplos XML de la sección 10.
 
 Si prefieres armar una petición manual, la estructura general es:
 
@@ -311,12 +319,16 @@ Si prefieres armar una petición manual, la estructura general es:
 
 ```text
 src\main\java\com\infracciones\apiinfraccionesvehiculares
-├── Config       → Configuración de CXF (publicación de endpoints SOAP)
-├── Excepcion    → Excepciones de negocio personalizadas
-├── Model        → Clases que representan las tablas de MySQL
-├── Repository   → Acceso a datos vía JDBC (JdbcTemplate)
+├── Config       → SoapConfig (publica los endpoints SOAP) y SecurityConfig (cifrador BCrypt)
+├── Excepcion    → Excepciones de negocio (no encontrado, duplicado, en uso)
+├── Model        → Clases que viajan en las respuestas (Persona, Usuario, Vehiculo,
+│                  TipoInfraccion, InfraccionDetalle)
+├── Repository   → Acceso a datos vía JDBC (JdbcTemplate), único lugar con SQL
 ├── Service      → Lógica de negocio y validaciones
 └── soap         → Contratos (interfaces) e implementaciones de los servicios SOAP
+
+postman\         → Colección de Postman con peticiones de ejemplo
+src\main\resources\application.properties.example → Plantilla de configuración
 ```
 
 Regla de dependencia entre capas (no te saltes niveles):
@@ -327,7 +339,410 @@ soap (endpoint SOAP) → Service (reglas de negocio) → Repository (SQL) → My
 
 ---
 
-## 10. Problemas comunes
+## 10. Servicios SOAP disponibles
+
+El backend publica **5 servicios SOAP**. Cada servicio tiene **una sola URL** y todas sus operaciones
+se invocan con `POST` a esa URL.
+
+| Servicio | URL del servicio (POST) | WSDL (contrato) | Qué administra |
+|---|---|---|---|
+| Tipos de infracción | `http://localhost:8080/services/tipoinfracciones` | `...?wsdl` | Catálogo de infracciones y su monto |
+| Personas | `http://localhost:8080/services/personas` | `...?wsdl` | Datos de ciudadanos (identificados por DPI) |
+| Usuarios | `http://localhost:8080/services/usuarios` | `...?wsdl` | Cuentas del sistema, roles y contraseñas |
+| Vehículos | `http://localhost:8080/services/vehiculos` | `...?wsdl` | Vehículos (identificados por placa) |
+| Infracciones | `http://localhost:8080/services/infracciones` | `...?wsdl` | Registro, consulta y anulación de infracciones |
+
+### 10.1 ¿Cómo sabe el backend qué operación ejecutar si la URL es la misma?
+
+A diferencia de REST, en SOAP **no existen URLs como `/infracciones/registrar`**. La acción va
+**dentro del XML**: el primer elemento dentro de `<soapenv:Body>` es el nombre de la operación.
+
+```xml
+<soapenv:Body>
+    <tns:registrarInfraccion>   <!-- este elemento le dice la acción a ejecutar -->
+        ...
+    </tns:registrarInfraccion>
+</soapenv:Body>
+```
+
+Apache CXF lee ese elemento, lo compara con los métodos `@WebMethod` del servicio y ejecuta el método
+Java correspondiente.
+
+> **Sobre el encabezado `SOAPAction`:** este proyecto **no lo utiliza**. Las operaciones se publican
+> con `soapAction=""` y basta con enviar `Content-Type: text/xml; charset=UTF-8`. Puedes
+> comprobarlo abriendo cualquier WSDL y buscando `soapAction=`.
+
+### 10.2 Configuración común de Postman (para todas las operaciones)
+
+| Campo | Valor |
+|---|---|
+| Método | `POST` |
+| URL | La del servicio (sin `?wsdl`) |
+| Header | `Content-Type: text/xml; charset=UTF-8` |
+| Body | `raw` → `XML` |
+
+Todos los ejemplos usan esta estructura base (solo cambia el contenido dentro de `<soapenv:Body>`):
+
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:tns="https://soap.apiinfraccionesvehiculares.infracciones.com/">
+   <soapenv:Body>
+      ... operación ...
+   </soapenv:Body>
+</soapenv:Envelope>
+```
+
+### 10.3 Servicio de tipos de infracción — `/services/tipoinfracciones`
+
+Administra el catálogo de infracciones (código, nombre, descripción y monto). El monto definido
+aquí es el que se copia a cada infracción cuando se registra.
+
+| Operación | Parámetros | Qué hace |
+|---|---|---|
+| `listarTipoInfracciones` | — | Devuelve todos los tipos |
+| `consultarTipoInfraccionPorId` | `id` | Devuelve un tipo por su id |
+| `consultarTipoInfraccionPorCodigo` | `codigo` | Devuelve un tipo por su código (ej. `INF-001`) |
+| `crearTipoInfraccion` | `codigo`, `nombre`, `descripcion`, `monto` | Crea un tipo nuevo |
+| `actualizarTipoInfraccion` | `id`, `codigo`, `nombre`, `descripcion`, `monto` | Modifica un tipo existente |
+| `eliminarTipoInfraccion` | `id` | Elimina un tipo |
+
+Reglas:
+- El `codigo` no se puede repetir.
+- El `monto` debe ser mayor a cero.
+- **No se puede eliminar** un tipo que ya tenga infracciones registradas (error `TipoInfraccionEnUsoException`).
+
+Ejemplo — crear:
+
+```xml
+<tns:crearTipoInfraccion>
+   <codigo>INF-004</codigo>
+   <nombre>Semáforo en rojo</nombre>
+   <descripcion>Cruzar con la luz roja</descripcion>
+   <monto>400.00</monto>
+</tns:crearTipoInfraccion>
+```
+
+### 10.4 Servicio de personas — `/services/personas`
+
+Administra a los ciudadanos. **Toda la identificación se hace por DPI** (no por el id interno).
+
+| Operación | Parámetros | Qué hace |
+|---|---|---|
+| `listarPersonas` | — | Devuelve todas las personas |
+| `consultarPersonaPorDpi` | `dpi` | Devuelve una persona por su DPI |
+| `crearPersona` | `dpi`, `nombre`, `apellido`, `telefono`, `direccion` | Registra una persona |
+| `actualizarPersona` | `dpi`, `nombre`, `apellido`, `telefono`, `direccion` | Modifica los datos de la persona identificada por el DPI |
+| `eliminarPersona` | `dpi` | Elimina una persona |
+
+Reglas:
+- Todos los campos son obligatorios y el DPI no se puede repetir.
+- **El DPI no se puede modificar**: en `actualizarPersona` se usa solo para ubicar el registro.
+- **No se puede eliminar** una persona que tenga un usuario asociado o infracciones a su nombre
+  (error `PersonaEnUsoException`).
+
+Ejemplo — crear:
+
+```xml
+<tns:crearPersona>
+   <dpi>1234567890101</dpi>
+   <nombre>Juan</nombre>
+   <apellido>Pérez</apellido>
+   <telefono>55551234</telefono>
+   <direccion>Zona 1, Ciudad de Guatemala</direccion>
+</tns:crearPersona>
+```
+
+### 10.5 Servicio de usuarios — `/services/usuarios`
+
+Administra las cuentas que usarán el sistema. Cada usuario pertenece a **una persona** (que debe
+existir) y tiene **un rol** (`Admin`, `Agente` o `Ciudadano`). Se identifica por su **nombre de usuario**.
+
+| Operación | Parámetros | Qué hace |
+|---|---|---|
+| `listarUsuarios` | — | Devuelve todos los usuarios |
+| `consultarUsuarioPorUsername` | `usuario` | Devuelve un usuario por su nombre de usuario |
+| `crearUsuario` | `dpiPersona`, `usuario`, `contrasena`, `nombreRol`, `estado` | Crea la cuenta de una persona existente |
+| `actualizarUsuario` | `usuario`, `nombreRol`, `estado` | Cambia el rol y/o el estado (activo/inactivo) |
+| `cambiarContrasena` | `usuario`, `nuevaContrasena` | Cambia la contraseña |
+| `eliminarUsuario` | `usuario` | Elimina la cuenta |
+
+Reglas y decisiones:
+- `crearUsuario` recibe el **DPI** de la persona; el backend busca internamente su `id_persona`.
+- El rol se envía **por nombre** (`Admin`, `Agente`, `Ciudadano`); el backend lo traduce a `id_rol`.
+- Una persona solo puede tener **un** usuario, y el nombre de usuario no se puede repetir.
+- **La contraseña se guarda cifrada con BCrypt** y **nunca se devuelve** en las respuestas XML.
+- **No se puede eliminar** un usuario que haya registrado infracciones (error `UsuarioEnUsoException`).
+
+Ejemplo — crear:
+
+```xml
+<tns:crearUsuario>
+   <dpiPersona>1234567890101</dpiPersona>
+   <usuario>jperez</usuario>
+   <contrasena>MiClave123</contrasena>
+   <nombreRol>Agente</nombreRol>
+   <estado>true</estado>
+</tns:crearUsuario>
+```
+
+### 10.6 Servicio de vehículos — `/services/vehiculos`
+
+Administra los vehículos. **Se identifican por su placa.**
+
+| Operación | Parámetros | Qué hace |
+|---|---|---|
+| `listarVehiculos` | — | Devuelve todos los vehículos |
+| `consultarVehiculoPorPlaca` | `placa` | Devuelve un vehículo por su placa |
+| `crearVehiculo` | `placa`, `marca`, `modelo`, `color` | Registra un vehículo |
+| `actualizarVehiculo` | `placa`, `marca`, `modelo`, `color` | Modifica marca, modelo y color (la placa no cambia) |
+| `eliminarVehiculo` | `placa` | Elimina un vehículo |
+
+Reglas:
+- Todos los campos son obligatorios y la placa no se puede repetir.
+- **No se puede eliminar** un vehículo que tenga infracciones asociadas (error `VehiculoEnUsoException`).
+
+Ejemplo — crear:
+
+```xml
+<tns:crearVehiculo>
+   <placa>P123ABC</placa>
+   <marca>Toyota</marca>
+   <modelo>Corolla 2020</modelo>
+   <color>Rojo</color>
+</tns:crearVehiculo>
+```
+
+### 10.7 Servicio de infracciones — `/services/infracciones`
+
+Es el servicio principal. **No hay eliminación**: las infracciones se **anulan** para conservar el historial.
+
+| Operación | Parámetros | Qué hace |
+|---|---|---|
+| `listarInfracciones` | — | Devuelve todas las infracciones (más recientes primero) |
+| `consultarPorNumero` | `numeroInfraccion` | Devuelve una infracción |
+| `consultarPorPlaca` | `placa` | Devuelve las infracciones de un vehículo |
+| `consultarPorDpi` | `dpi` | Devuelve las infracciones de una persona |
+| `registrarInfraccion` | `numeroInfraccion`, `fechaInfraccion`, `direccionInfraccion`, `dpiPersona`, `placaVehiculo`, `usuarioAgente`, `codigoTipoInfraccion` | Registra una infracción nueva |
+| `anularInfraccion` | `numeroInfraccion` | Cambia el estado a `Anulada` |
+
+**¿Qué devuelve cada infracción?** (objeto `InfraccionDetalle`, pensado para que el frontend no necesite
+hacer varias consultas):
+
+| Campo | Contenido |
+|---|---|
+| `idInfraccion` | Id interno |
+| `numeroInfraccion` | Número único de la infracción |
+| `fechaInfraccion` | Fecha en formato `YYYY-MM-DD` |
+| `direccionInfraccion` | Lugar donde ocurrió |
+| `montoOriginal` | Monto tomado del tipo de infracción |
+| `dpiPersona` / `nombrePersona` | DPI y nombre completo del infractor |
+| `placaVehiculo` | Placa del vehículo |
+| `tipoInfraccion` | Nombre del tipo de infracción |
+| `estado` | `Pendiente`, `Pagada`, `Vencida` o `Anulada` |
+| `usuarioAgente` | Agente que la registró |
+
+**¿Qué pasa al registrar una infracción?** (`registrarInfraccion`, paso a paso)
+
+1. Se valida que el número y la dirección no estén vacíos y que el **número no exista** ya.
+2. Si no se envía fecha, se usa la **fecha de hoy**.
+3. Se buscan los datos relacionados: persona (por DPI), vehículo (por placa), agente (por nombre de
+   usuario) y tipo de infracción (por código). Si alguno **no existe**, se devuelve un error claro.
+4. El **monto** se toma del tipo de infracción en la base de datos (**el cliente nunca envía el monto**).
+5. Se guarda con estado inicial **`Pendiente`**.
+6. Se devuelve la infracción completa ya registrada.
+
+**¿Qué pasa al anular?** Solo se puede anular una infracción que **no esté `Pagada` ni `Anulada`**.
+No se borra: solo cambia su estado a `Anulada`.
+
+Ejemplo — registrar:
+
+```xml
+<tns:registrarInfraccion>
+   <numeroInfraccion>INFR-0001</numeroInfraccion>
+   <fechaInfraccion>2026-10-13</fechaInfraccion>
+   <direccionInfraccion>Zona 10, Ciudad de Guatemala</direccionInfraccion>
+   <dpiPersona>1234567890101</dpiPersona>
+   <placaVehiculo>P123ABC</placaVehiculo>
+   <usuarioAgente>jperez</usuarioAgente>
+   <codigoTipoInfraccion>INF-001</codigoTipoInfraccion>
+</tns:registrarInfraccion>
+```
+
+Ejemplos — consultar y anular:
+
+```xml
+<tns:consultarPorNumero><numeroInfraccion>INFR-0001</numeroInfraccion></tns:consultarPorNumero>
+<tns:consultarPorPlaca><placa>P123ABC</placa></tns:consultarPorPlaca>
+<tns:consultarPorDpi><dpi>1234567890101</dpi></tns:consultarPorDpi>
+<tns:anularInfraccion><numeroInfraccion>INFR-0001</numeroInfraccion></tns:anularInfraccion>
+<tns:listarInfracciones/>
+```
+
+---
+
+## 11. Cómo funciona internamente (qué hace cada capa)
+
+Cada operación SOAP atraviesa las mismas capas. Ninguna capa se salta a otra:
+
+```text
+soap  →  Service  →  Repository  →  MySQL
+```
+
+| Capa | Carpeta | Para qué sirve |
+|---|---|---|
+| **Contrato SOAP** | `soap\*SoapService.java` | Interfaz que declara qué operaciones existen y sus parámetros (`@WebService`, `@WebMethod`, `@WebParam`). De aquí se genera el WSDL. |
+| **Implementación SOAP** | `soap\*SoapServiceImpl.java` | Recibe la llamada SOAP y **solo delega** al servicio de negocio. No tiene lógica. |
+| **Servicio (negocio)** | `Service\*.java` | Valida datos, aplica reglas (duplicados, existencia, estados) y decide qué errores lanzar. |
+| **Repositorio** | `Repository\*.java` | Único lugar con SQL. Usa `JdbcTemplate` con consultas parametrizadas (`?`) para evitar inyección SQL. |
+| **Modelo** | `Model\*.java` | Clases que viajan en las respuestas XML. Requieren constructor vacío y getters/setters. |
+| **Excepciones** | `Excepcion\*.java` | Errores de negocio con mensajes claros (no encontrado, duplicado, en uso). |
+| **Configuración** | `Config\*.java` | `SoapConfig` publica cada servicio SOAP en su URL; `SecurityConfig` define el cifrador BCrypt. |
+
+### Ejemplo: recorrido completo de `registrarInfraccion`
+
+1. **Postman** envía el XML por `POST` a `/services/infracciones`.
+2. **CXF** lee `<tns:registrarInfraccion>` y llama a `InfraccionServiceImpl.registrarInfraccion(...)`.
+3. La implementación delega a **`InfraccionServiceLayer`**, que valida y busca persona, vehículo,
+   agente y tipo de infracción usando sus repositorios.
+4. **`InfraccionRepository`** ejecuta el `INSERT` en MySQL.
+5. El servicio vuelve a consultar la infracción (con los `JOIN` a persona, vehículo, tipo, estado y
+   usuario) y devuelve un **`InfraccionDetalle`**.
+6. CXF lo convierte a XML y responde al cliente.
+
+### Archivos por entidad
+
+| Entidad | Model | Repository | Service | soap |
+|---|---|---|---|---|
+| Tipo de infracción | `TipoInfraccion` | `TipoInfraccionRepository` | `TipoInfraccionService` | `TipoInfraccionSoapService` / `Impl` |
+| Persona | `Persona` | `PersonaRepository` | `PersonaService` | `PersonaSoapService` / `Impl` |
+| Usuario | `Usuario` | `UsuarioRepository` | `UsuarioService` | `UsuarioSoapService` / `Impl` |
+| Vehículo | `Vehiculo` | `VehiculoRepository` | `VehiculoService` | `VehiculoSoapService` / `Impl` |
+| Infracción | `InfraccionDetalle` | `InfraccionRepository` | `InfraccionServiceLayer` | `InfraccionService` / `Impl` |
+
+> El servicio de negocio de infracciones se llama `InfraccionServiceLayer` para no chocar con la
+> interfaz SOAP `InfraccionService`.
+
+### Regla importante al agregar un servicio nuevo
+
+Cuando crees un servicio SOAP nuevo, en `Config\SoapConfig.java` el bean debe recibir la **interfaz
+del paquete `soap`** (por ejemplo `VehiculoSoapService`), **no** la clase de la capa `Service`.
+Si se publica la clase equivocada, el WSDL se genera **sin operaciones** y con otro namespace.
+
+---
+
+## 12. Reglas de negocio y decisiones de diseño
+
+| Tema | Decisión |
+|---|---|
+| Identificadores públicos | Se usan datos reales y legibles (DPI, placa, nombre de usuario, número de infracción, código de tipo) en lugar de ids internos. El backend traduce a ids. |
+| Integridad referencial | Antes de eliminar, el servicio comprueba si el registro está en uso y devuelve un mensaje claro en vez del error crudo de MySQL. |
+| Campos inmutables | El DPI de una persona y la placa de un vehículo no se modifican. |
+| Contraseñas | Se cifran con **BCrypt** (`spring-security-crypto`) y nunca se devuelven al cliente. |
+| Montos | El cliente **nunca** envía montos: se toman del tipo de infracción en la base de datos. |
+| Infracciones | No se borran: se **anulan**. Una infracción pagada no se puede anular. |
+| Fechas | Viajan como texto `YYYY-MM-DD`. |
+| Dinero | Se usa `BigDecimal` para evitar errores de redondeo. |
+
+---
+
+## 13. Orden recomendado para probar
+
+Las tablas dependen unas de otras, así que conviene probar en este orden:
+
+1. **Tipo de infracción:** ya existen `INF-001`, `INF-002` e `INF-003` por el script SQL.
+2. **Persona:** `crearPersona`.
+3. **Usuario (agente):** `crearUsuario` con el DPI de esa persona y rol `Agente`.
+4. **Vehículo:** `crearVehiculo`.
+5. **Infracción:** `registrarInfraccion` usando el DPI, la placa, el usuario agente y el código de tipo anteriores.
+6. **Consultas:** `consultarPorNumero`, `consultarPorPlaca`, `consultarPorDpi`, `listarInfracciones`.
+7. **Anulación:** `anularInfraccion`.
+
+Casos de error recomendados: número de infracción repetido, DPI o placa inexistente, anular una
+infracción ya anulada, eliminar una persona con usuario o infracciones, eliminar un vehículo con
+infracciones.
+
+---
+
+## 14. Conectar el backend a una base de datos en otra computadora
+
+Si MySQL corre en **otra máquina**, además de cambiar credenciales hay que preparar ambos lados.
+
+**En la máquina de MySQL:**
+
+1. Permitir conexiones remotas en `my.ini`: `bind-address = 0.0.0.0` y reiniciar el servicio MySQL.
+2. Crear un usuario que acepte conexiones remotas:
+
+```sql
+CREATE USER 'infracciones_user'@'%' IDENTIFIED BY 'contraseña_segura';
+GRANT ALL PRIVILEGES ON infracciones_vehiculares.* TO 'infracciones_user'@'%';
+FLUSH PRIVILEGES;
+```
+
+3. Abrir el **puerto 3306** en el Firewall de Windows (regla de entrada TCP).
+4. Obtener su IP con `ipconfig` (IPv4).
+
+**En tu máquina (`application.properties`):** cambia `localhost` por la IP de esa máquina:
+
+```properties
+spring.datasource.url=jdbc:mysql://192.168.1.50:3306/infracciones_vehiculares?useSSL=false&serverTimezone=America/Guatemala&allowPublicKeyRetrieval=true
+```
+
+**Verificar conectividad antes de levantar el backend:**
+
+```powershell
+Test-NetConnection -ComputerName 192.168.1.50 -Port 3306
+```
+
+`TcpTestSucceeded` debe ser `True`. Ambas máquinas deben estar en la misma red (o conectadas por VPN).
+Si la IP se asigna por DHCP, puede cambiar entre sesiones: vuelve a revisarla si aparece `Connection timed out`.
+
+---
+
+## 15. Cómo consumirá el frontend estos servicios
+
+El frontend **no escribe XML a mano**. Genera un cliente SOAP a partir del WSDL:
+
+1. Se apunta a la URL del WSDL, por ejemplo `http://localhost:8080/services/infracciones?wsdl`.
+2. Con `wsimport` o el plugin de CXF para Maven se generan las clases Java (interfaz y modelos).
+3. En los controllers se llama como métodos normales:
+
+```java
+List<InfraccionDetalle> lista = infraccionService.consultarPorPlaca("P123ABC");
+```
+
+La librería arma el XML, lo envía por `POST` a la misma URL y devuelve objetos Java.
+Lo único que el frontend necesita del backend es **la URL de cada WSDL**.
+
+---
+
+## 16. Pagos y regla de descuento (pendiente de implementar)
+
+> ⚠️ **Estado:** el servicio de pagos está **diseñado pero aún no implementado** en el código. La
+> tabla `pago` y la regla de descuento (`regla_descuento`) ya existen en la base de datos.
+
+Diseño acordado:
+
+- La tabla `pago` **no lleva CRUD completo**: un pago es una transacción realizada, por lo que no se edita ni se elimina.
+- Operaciones previstas: `calcularMontoAPagar`, `registrarPago`, `consultarPagoPorInfraccion` y `listarPagos`.
+- **El cliente solo envía el número de infracción**; el backend calcula todo.
+
+Funcionamiento previsto de `registrarPago` (todo dentro de **una transacción**):
+
+1. Busca la infracción y valida que **no esté `Pagada` ni `Anulada`** y que no tenga ya un pago.
+2. Lee la **regla activa** de `regla_descuento` (actualmente 50 % y 4 días).
+3. Calcula `días = fecha de pago − fecha de la infracción`.
+4. Si `días <= dias_limite` aplica el descuento; si no, se paga el monto completo.
+5. `descuento = monto_original × porcentaje / 100` y `monto_pagado = monto_original − descuento`.
+6. Inserta el registro en `pago` y cambia la infracción a `Pagada`. Si algo falla, **se revierte todo**.
+
+Ejemplo (infracción `INF-001` de Q500): pagada a los 2 días → descuento Q250 y pago de Q250;
+pagada a los 13 días → sin descuento y pago de Q500.
+
+Pendiente a futuro: un proceso que cambie automáticamente las infracciones a `Vencida`.
+
+---
+
+## 17. Problemas comunes
 
 | Error | Causa probable | Solución |
 |---|---|---|
@@ -335,14 +750,18 @@ soap (endpoint SOAP) → Service (reglas de negocio) → Repository (SQL) → My
 | `Communications link failure` | MySQL no está iniciado o el puerto/URL está mal | Verifica que el servicio MySQL esté corriendo |
 | `Attributes portName, serviceName and endpointInterface are not allowed in the @WebService annotation of an SEI` | Una interfaz de contrato SOAP (`soap\*Service.java`) tiene atributos que solo van en la implementación | Deja esos atributos únicamente en las clases `*ServiceImpl.java` |
 | El navegador solo muestra XML al abrir la URL del servicio | Estás viendo el WSDL, no ejecutando una operación | Usa Postman/SoapUI con `POST` y el body XML de la operación |
+| El WSDL carga pero no muestra operaciones, o Postman responde `Message part {...} was not recognized` | En `SoapConfig` se publicó la clase de la capa `Service` en lugar de la interfaz `soap\*SoapService` | Haz que el bean `Endpoint` reciba la interfaz del paquete `soap` (ver sección 11) |
+| `Failed to obtain JDBC Connection` con `Connection timed out` | La máquina de MySQL no responde (apagada, IP distinta, firewall o red distinta) | Revisa la IP en `application.properties` y prueba `Test-NetConnection <ip> -Port 3306` (ver sección 14) |
+| Una operación responde con un error de negocio (`... no existe`, `... ya existe`, `... en uso`) | No es un fallo del sistema: se incumplió una regla de negocio | Lee el mensaje y revisa el orden de pruebas de la sección 13 |
 
 ---
 
-## 11. Tecnologías utilizadas
+## 18. Tecnologías utilizadas
 
 - Java 21
 - Spring Boot 4.1.1
 - Apache CXF (JAX-WS) para SOAP
 - Spring JDBC (`JdbcTemplate`)
+- Spring Security Crypto (BCrypt) para cifrar contraseñas
 - MySQL 8
 - Maven (Maven Wrapper)
