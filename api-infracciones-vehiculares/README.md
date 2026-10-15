@@ -266,6 +266,7 @@ http://localhost:8080/services/personas?wsdl
 http://localhost:8080/services/usuarios?wsdl
 http://localhost:8080/services/vehiculos?wsdl
 http://localhost:8080/services/infracciones?wsdl
+http://localhost:8080/services/pagos?wsdl
 ```
 
 Cada URL debe mostrarte un documento XML con las operaciones del servicio (por ejemplo
@@ -341,7 +342,7 @@ soap (endpoint SOAP) → Service (reglas de negocio) → Repository (SQL) → My
 
 ## 10. Servicios SOAP disponibles
 
-El backend publica **5 servicios SOAP**. Cada servicio tiene **una sola URL** y todas sus operaciones
+El backend publica **6 servicios SOAP**. Cada servicio tiene **una sola URL** y todas sus operaciones
 se invocan con `POST` a esa URL.
 
 | Servicio | URL del servicio (POST) | WSDL (contrato) | Qué administra |
@@ -351,6 +352,7 @@ se invocan con `POST` a esa URL.
 | Usuarios | `http://localhost:8080/services/usuarios` | `...?wsdl` | Cuentas del sistema, roles y contraseñas |
 | Vehículos | `http://localhost:8080/services/vehiculos` | `...?wsdl` | Vehículos (identificados por placa) |
 | Infracciones | `http://localhost:8080/services/infracciones` | `...?wsdl` | Registro, consulta y anulación de infracciones |
+| Pagos | `http://localhost:8080/services/pagos` | `...?wsdl` | Cálculo y registro de pagos con descuento por pronto pago |
 
 ### 10.1 ¿Cómo sabe el backend qué operación ejecutar si la URL es la misma?
 
@@ -715,28 +717,55 @@ Lo único que el frontend necesita del backend es **la URL de cada WSDL**.
 
 ---
 
-## 16. Pagos y regla de descuento (pendiente de implementar)
+## 16. Servicio de pagos y regla de descuento — `/services/pagos`
 
-> ⚠️ **Estado:** el servicio de pagos está **diseñado pero aún no implementado** en el código. La
-> tabla `pago` y la regla de descuento (`regla_descuento`) ya existen en la base de datos.
+Un pago es una **transacción ya realizada**, por eso este servicio **no tiene actualizar ni eliminar**. El cliente
+**solo envía el número de infracción**; el backend calcula todos los montos con la regla de la tabla `regla_descuento`.
 
-Diseño acordado:
+| Operación | Parámetros | Qué hace |
+|---|---|---|
+| `calcularMontoAPagar` | `numeroInfraccion` | Muestra cuánto se pagaría hoy, **sin guardar nada** (útil para que el frontend confirme el monto) |
+| `aplicarPago` | `numeroInfraccion` | Registra el pago y marca la infracción como `Pagada` |
+| `consultarPagoPorInfraccion` | `numeroInfraccion` | Devuelve el pago de una infracción |
+| `listarPagos` | — | Devuelve todos los pagos (más recientes primero) |
 
-- La tabla `pago` **no lleva CRUD completo**: un pago es una transacción realizada, por lo que no se edita ni se elimina.
-- Operaciones previstas: `calcularMontoAPagar`, `registrarPago`, `consultarPagoPorInfraccion` y `listarPagos`.
-- **El cliente solo envía el número de infracción**; el backend calcula todo.
+**¿Qué hace `aplicarPago`?** (paso a paso, todo dentro de **una transacción**)
 
-Funcionamiento previsto de `registrarPago` (todo dentro de **una transacción**):
+1. Busca la infracción por su número. Si no existe, devuelve error.
+2. Valida que **no esté `Anulada`**, que **no esté `Pagada`** y que **no tenga ya un pago**.
+3. Si no está `Vencida`, lee la **regla activa** de `regla_descuento` (actualmente 50 % y 4 días). Si no hay una regla activa, devuelve error.
+4. Calcula `días = fecha de pago − fecha de la infracción`.
+5. Si `días <= dias_limite` aplica el descuento; si no, se paga el monto completo. Una infracción `Vencida` siempre se paga completa.
+6. `montoDescuento = montoInicial × porcentaje / 100` y `montoPagado = montoInicial − montoDescuento`.
+7. Inserta el registro en `pago` y cambia la infracción a `Pagada`. **Si algo falla, se revierte todo**: nunca queda un pago sin cambio de estado ni al revés.
 
-1. Busca la infracción y valida que **no esté `Pagada` ni `Anulada`** y que no tenga ya un pago.
-2. Lee la **regla activa** de `regla_descuento` (actualmente 50 % y 4 días).
-3. Calcula `días = fecha de pago − fecha de la infracción`.
-4. Si `días <= dias_limite` aplica el descuento; si no, se paga el monto completo.
-5. `descuento = monto_original × porcentaje / 100` y `monto_pagado = monto_original − descuento`.
-6. Inserta el registro en `pago` y cambia la infracción a `Pagada`. Si algo falla, **se revierte todo**.
+La fecha de pago es la **fecha de hoy del servidor**. Los 4 días se cuentan desde la fecha de la infracción e **incluyen el día 4**.
 
-Ejemplo (infracción `INF-001` de Q500): pagada a los 2 días → descuento Q250 y pago de Q250;
-pagada a los 13 días → sin descuento y pago de Q500.
+Ejemplo — calcular y pagar:
+
+```xml
+<tns:calcularMontoAPagar>
+   <numeroInfraccion>INFR-0001</numeroInfraccion>
+</tns:calcularMontoAPagar>
+```
+
+```xml
+<tns:aplicarPago>
+   <numeroInfraccion>INFR-0001</numeroInfraccion>
+</tns:aplicarPago>
+```
+
+La respuesta incluye `idPago`, `numeroInfraccion`, `montoInicial`, `porcentajeDescuento`, `montoDescuento`, `montoPagado` y `fechaPago`.
+
+**Cómo probar la regla de los 4 días** (con un tipo `INF-001` de Q500):
+
+- Infracción de hace **2 días**: descuento 50 % → `montoDescuento` 250.00 y `montoPagado` 250.00.
+- Infracción de hace **13 días**: sin descuento → `montoPagado` 500.00.
+- Pagar **dos veces** la misma infracción debe fallar con "ya fue pagada".
+
+Archivos: `Model\Pago`, `Model\ReglaDescuento`, `Model\LocalDateAdapter`, `Repository\PagoRepository`,
+`Repository\ReglaDescuentoRepository`, `Service\PagoService`, `soap\PagoSoapService` / `Impl` y
+`Excepcion\PagoNoEncontradoException` / `ReglaDescuentoActivaException`.
 
 Pendiente a futuro: un proceso que cambie automáticamente las infracciones a `Vencida`.
 

@@ -57,4 +57,23 @@ public class SoapConfig {
         endpoint.publish("/vehiculos");
         return endpoint;
     }
+
+    @Bean
+    public Endpoint pagoEndpoint(
+            Bus bus,
+            PagoSoapService pagoSoapService
+    ){
+        EndpointImpl endpoint = new EndpointImpl(bus, pagoSoapService);
+        endpoint.publish("/pagos");
+        return endpoint;
+    }
+    @Bean
+    public Endpoint authEndpoint(
+            Bus bus,
+            AuthSoapService authSoapService
+    ){
+        EndpointImpl endpoint = new EndpointImpl(bus, authSoapService);
+        endpoint.publish("/auth");
+        return endpoint;
+    }
 }
