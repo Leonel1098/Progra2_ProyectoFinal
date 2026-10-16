@@ -1,9 +1,9 @@
 package com.infracciones.web.controller;
 
 import com.infracciones.web.dto.response.InfraccionPublica;
-import com.infracciones.web.dto.response.InfraccionResponse;
 import com.infracciones.web.service.ConsultaInfraccionService;
 import com.infracciones.web.service.ServicioInfraccionesException;
+import com.infracciones.web.service.SoapFaultException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,12 +39,14 @@ public class ConsultaController {
 
         boolean porPlaca = !"INFRACCION".equals(tipoBusqueda);
         String limpio = valor.trim().toUpperCase();
+        String tipoPlacaNormalizado = tipoPlaca.trim().toUpperCase();
+        model.addAttribute("tipoPlaca", tipoPlacaNormalizado);
 
         model.addAttribute("tipoBusqueda", porPlaca ? "PLACA" : "INFRACCION");
         model.addAttribute("valor", limpio);
 
         String criterio = porPlaca
-                ? tipoPlaca.trim().toUpperCase() + limpio.replaceAll("[^A-Z0-9]", "")
+                ? tipoPlacaNormalizado + limpio.replaceAll("[^A-Z0-9]", "")
                 : limpio;
 
         if (!(porPlaca ? PLACA : NUMERO).matcher(criterio).matches()) {
@@ -55,9 +57,9 @@ public class ConsultaController {
         }
 
         try {
-            List<InfraccionResponse> encontradas = porPlaca
-                    ? servicio.consultarPorPlaca(criterio)
-                    : servicio.consultarPorNumero(criterio);
+            List<InfraccionPublica> encontradas = porPlaca
+                    ? servicio.consultaPublicaPorPlaca(criterio)
+                    : servicio.consultaPublicaPorNumero(criterio);
 
             if (encontradas.isEmpty()) {
                 if (porPlaca) {
@@ -66,9 +68,12 @@ public class ConsultaController {
                     model.addAttribute("mensaje", "No se encontró una infracción con ese número.");
                 }
             } else {
-                model.addAttribute("infracciones",
-                        encontradas.stream().map(InfraccionPublica::desde).toList());
+                model.addAttribute("infracciones", encontradas);
             }
+        } catch (SoapFaultException e) {
+            model.addAttribute("mensaje", porPlaca
+                    ? "No se encontró un vehículo registrado con esa placa."
+                    : "No se encontró una infracción con ese número.");
         } catch (ServicioInfraccionesException e) {
             model.addAttribute("mensaje",
                     "No pudimos realizar la consulta en este momento. Inténtalo más tarde.");

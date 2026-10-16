@@ -18,14 +18,23 @@
         <a class="brand" href="${pageContext.request.contextPath}/">
             <div class="brand-badge">🏛️</div>
             <div class="brand-text">
-                <span class="brand-title">Movilidad & Tránsito</span>
+                <span class="brand-title">Movilidad &amp; Tránsito</span>
                 <span class="brand-sub">PORTAL OFICIAL DE CONSULTA</span>
             </div>
         </a>
-        <a class="btn-login" href="${pageContext.request.contextPath}/login">
-            <span>Iniciar sesión</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-        </a>
+
+        <c:choose>
+            <c:when test="${not empty sessionScope.usuarioSesion}">
+                <a class="btn-login" href="${pageContext.request.contextPath}/inicio">
+                    <span>Mi cuenta</span>
+                </a>
+            </c:when>
+            <c:otherwise>
+                <a class="btn-login" href="${pageContext.request.contextPath}/login">
+                    <span>Iniciar sesión</span>
+                </a>
+            </c:otherwise>
+        </c:choose>
     </div>
 </header>
 
@@ -63,10 +72,9 @@
                     <div class="plate-type-wrapper" id="plateTypeWrapper">
                         <select id="tipoPlaca" name="tipoPlaca" class="plate-type-select">
 
-                            <option value="P" selected>P</option>
-                            <option value="M">M</option>
-                            <option value="C">C</option>
-                            <option value="A">A</option>
+                            <c:forTokens items="P,M,C,A" delims="," var="t">
+                                <option value="${t}" ${t eq (empty tipoPlaca ? 'P' : tipoPlaca) ? 'selected' : ''}>${t}</option>
+                            </c:forTokens>
                         </select>
                         <span class="plate-separator">-</span>
                     </div>
@@ -126,27 +134,30 @@
                         <div class="infraccion-card">
                             <div class="infraccion-top">
                                 <div>
-                                    <span class="boleta-tag">Boleta #${inf.numeroBoleta}</span>
-                                    <span class="infraccion-fecha">${inf.fecha}</span>
+                                    <span class="boleta-tag">Boleta #<c:out value="${inf.numeroBoleta}"/></span>
+                                    <span class="infraccion-fecha"><c:out value="${inf.fecha}"/></span>
                                 </div>
                                 <span class="status-pill ${inf.pendiente ? 'status-pendiente' : 'status-pagada'}">
-    <c:out value="${inf.estado}"/>
-</span>
+                                                            <c:out value="${inf.estado}"/>
+                                </span>
                             </div>
 
                             <div class="infraccion-body">
-                                <p class="infraccion-motivo"><strong>Motivo:</strong> ${inf.motivo}</p>
+                                <p class="infraccion-motivo"><strong>Motivo:</strong> <c:out value="${inf.motivo}"/></p>
                                 <div class="infraccion-monto">
                                     <span class="monto-label">Monto total:</span>
-                                    <span class="monto-valor">Q ${inf.monto}</span>
+                                    <span class="monto-valor">Q <c:out value="${inf.monto}"/></span>
                                 </div>
                             </div>
 
                             <!-- Botón Pagar sólo si está pendiente -->
                             <c:if test="${inf.pendiente}">
+                                <c:url var="urlPago" value="/login">
+                                    <c:param name="redirect" value="pago"/>
+                                    <c:param name="infraccionId" value="${inf.numeroBoleta}"/>
+                                </c:url>
                                 <div class="infraccion-actions">
-                                    <a href="${pageContext.request.contextPath}/login?redirect=pago&infraccionId=${inf.numeroBoleta}"
-                                       class="btn-pagar">
+                                    <a href="${urlPago}" class="btn-pagar">
                                         <span>💳 Pagar Infracción</span>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                                     </a>
@@ -186,19 +197,20 @@
             typeWrapper.style.display = 'flex';
             input.placeholder = '123ABC';
             input.maxLength = 7;
-            helper.textContent = 'Selecciona el tipo (P: Particular, M: Moto) e ingresa dígitos.';
+            helper.textContent = 'Selecciona el tipo de placa e ingresa 3 números y 3 letras. Ej: 123ABC';
             plateSub.textContent = 'CENTROAMÉRICA';
         } else {
             tabInfraccion.classList.add('active');
             tabPlaca.classList.remove('active');
             label.textContent = 'Número de Infracción (ID)';
             typeWrapper.style.display = 'none';
-            input.placeholder = 'INF-001245';
-            input.maxLength = 15;
+            input.placeholder = 'INFR-0001';
+            input.maxLength = 30;
             helper.textContent = 'Ingresa el código identificador de la boleta de infracción.';
             plateSub.textContent = 'BOLETA OFICIAL';
         }
     }
+    seleccionarModo('${tipoBusqueda eq "INFRACCION" ? "INFRACCION" : "PLACA"}');
 </script>
 </body>
 </html>
