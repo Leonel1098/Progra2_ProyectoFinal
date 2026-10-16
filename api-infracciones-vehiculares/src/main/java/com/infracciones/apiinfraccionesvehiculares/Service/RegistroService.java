@@ -7,6 +7,9 @@ import com.infracciones.apiinfraccionesvehiculares.Repository.PersonaRepository;
 import com.infracciones.apiinfraccionesvehiculares.Repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
+import java.text.Normalizer;
+import java.util.Locale;
+
 @Service
 public class RegistroService {
 
@@ -37,13 +40,22 @@ public class RegistroService {
         Persona persona = personaRepository.findByDpi(dpi.trim())
                 .orElseThrow(() -> new CredencialesInvalidasException(MENSAJE_GENERICO));
 
-        boolean coincide = persona.getNombrePersona().trim().equalsIgnoreCase(nombre.trim())
-                && persona.getApellidoPersona().trim().equalsIgnoreCase(apellido.trim());
+        boolean coincide = normalizarNombre(persona.getNombrePersona())
+                .equals(normalizarNombre(nombre))
+                && normalizarNombre(persona.getApellidoPersona())
+                .equals(normalizarNombre(apellido));
         if (!coincide || usuarioRepository.existsByIdPersona(persona.getIdPersona())) {
             throw new CredencialesInvalidasException(MENSAJE_GENERICO);
         }
 
         return usuarioService.createUser(persona.getDpiPersona(), nombreUsuario,
                 contrasena, SeguridadService.CIUDADANO, Boolean.TRUE);
+    }
+
+    private String normalizarNombre(String valor) {
+        return Normalizer.normalize(valor.trim(), Normalizer.Form.NFD)
+                .replaceAll("\\p{M}+", "")
+                .replaceAll("\\s+", " ")
+                .toLowerCase(Locale.ROOT);
     }
 }
