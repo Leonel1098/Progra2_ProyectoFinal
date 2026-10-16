@@ -43,7 +43,7 @@ public class CiudadanoController {
         model.addAttribute("tipoBusqueda", "PLACA");
         model.addAttribute("tipoPlaca", "P");
         cargarMisInfracciones(usuario, model);
-        return "mis-infracciones";
+        return "portal-admin";
     }
 
     @PostMapping("/ciudadano/infracciones/consulta")
@@ -56,7 +56,7 @@ public class CiudadanoController {
         cargarMisInfracciones(usuario, model);
         if (!csrfValido(sesion, csrf)) {
             model.addAttribute("mensajeBusqueda", "La sesión del formulario venció. Vuelve a intentarlo.");
-            return "mis-infracciones";
+            return "portal";
         }
 
         boolean porPlaca = !"INFRACCION".equals(tipoBusqueda);
@@ -73,7 +73,7 @@ public class CiudadanoController {
             model.addAttribute("mensajeBusqueda", porPlaca
                     ? "La placa no tiene un formato válido. Ejemplo: P123ABC."
                     : "El número de infracción no tiene un formato válido. Ejemplo: INFR-0001.");
-            return "mis-infracciones";
+            return "portal";
         }
 
         try {
@@ -91,10 +91,11 @@ public class CiudadanoController {
         } catch (ServicioInfraccionesException e) {
             model.addAttribute("mensajeBusqueda", "No pudimos realizar la consulta. Inténtalo más tarde.");
         }
-        return "mis-infracciones";
+        return "portal";
     }
 
     private void cargarMisInfracciones(SesionUsuario usuario, Model model) {
+        model.addAttribute("dpi", usuario.getDpiPersona());
         try {
             List<InfraccionResponse> lista = consultas.consultarPorDpi(
                     usuario.getDpiPersona(), usuario.getToken());
