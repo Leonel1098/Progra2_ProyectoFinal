@@ -1,7 +1,9 @@
 package com.infracciones.apiinfraccionesvehiculares.soap;
 
 import com.infracciones.apiinfraccionesvehiculares.Model.Usuario;
+import com.infracciones.apiinfraccionesvehiculares.Service.SeguridadService;
 import com.infracciones.apiinfraccionesvehiculares.Service.UsuarioService;
+import com.infracciones.apiinfraccionesvehiculares.Service.SesionService;
 import jakarta.jws.WebService;
 import org.springframework.stereotype.Service;
 
@@ -16,39 +18,49 @@ import java.util.List;
 public class UsuarioSoapServiceImpl implements UsuarioSoapService {
 
     private final UsuarioService usuarioService;
+    private final SeguridadService seguridad;
 
-    public UsuarioSoapServiceImpl(UsuarioService usuarioService) {
+
+    public UsuarioSoapServiceImpl(UsuarioService usuarioService, SeguridadService seguridad) {
         this.usuarioService = usuarioService;
+        this.seguridad = seguridad;
     }
 
     @Override
     public List<Usuario> listarUsuarios() {
+        seguridad.requerirRol(SeguridadService.ADMIN);
         return usuarioService.listAll();
     }
 
     @Override
     public Usuario consultarUsuarioPorUsername(String usuario) {
+
+        seguridad.requerirRol(SeguridadService.ADMIN);
         return usuarioService.getByUsername(usuario);
     }
 
     @Override
     public Usuario crearUsuario(String dpiPersona, String usuario, String contrasena,
                                 String nombreRol, Boolean estado) {
+        seguridad.requerirRol(SeguridadService.ADMIN);
         return usuarioService.createUser(dpiPersona, usuario, contrasena, nombreRol, estado);
     }
 
     @Override
     public Usuario actualizarUsuario(String usuario, String nombreRol, Boolean estado) {
+        seguridad.requerirRol(SeguridadService.ADMIN);
         return usuarioService.updateUser(usuario, nombreRol, estado);
     }
 
     @Override
     public void cambiarContrasena(String usuario, String nuevaContrasena) {
+        seguridad.requerirRol(SeguridadService.ADMIN);
         usuarioService.updatePassword(usuario, nuevaContrasena);
     }
 
     @Override
     public void eliminarUsuario(String usuario) {
+        seguridad.requerirRol(SeguridadService.ADMIN);
         usuarioService.deleteUser(usuario);
     }
 }
