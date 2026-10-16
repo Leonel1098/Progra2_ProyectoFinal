@@ -1,6 +1,7 @@
 package com.infracciones.apiinfraccionesvehiculares.soap;
 
 import com.infracciones.apiinfraccionesvehiculares.Model.InfraccionDetalle;
+import com.infracciones.apiinfraccionesvehiculares.Model.InfraccionPublica;
 import com.infracciones.apiinfraccionesvehiculares.Service.InfraccionServiceLayer;
 import com.infracciones.apiinfraccionesvehiculares.Model.Sesion;
 import com.infracciones.apiinfraccionesvehiculares.Service.SeguridadService;
@@ -72,6 +73,15 @@ public class InfraccionServiceImpl implements InfraccionService {
                 dpiPersona, placaVehiculo, sesion.getUsuario(), codigoTipoInfraccion);
     }
 
+    @Override
+    public List<InfraccionPublica> consultaPublicaPorPlaca(String placa) {
+        return service.listByPlaca(placa).stream().map(InfraccionPublica::desde).toList();
+    }
+
+    @Override
+    public InfraccionPublica consultaPublicaPorNumero(String numeroInfraccion) {
+        return InfraccionPublica.desde(service.getByNumero(numeroInfraccion));
+    }
     @Override
     public InfraccionDetalle anularInfraccion(String numeroInfraccion) {
         seguridad.requerirRol(SeguridadService.ADMIN);

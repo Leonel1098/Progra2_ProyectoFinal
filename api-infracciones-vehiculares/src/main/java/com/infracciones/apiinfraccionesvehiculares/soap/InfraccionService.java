@@ -1,6 +1,7 @@
 package com.infracciones.apiinfraccionesvehiculares.soap;
 
 import com.infracciones.apiinfraccionesvehiculares.Model.InfraccionDetalle;
+import com.infracciones.apiinfraccionesvehiculares.Model.InfraccionPublica;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
@@ -41,6 +42,15 @@ public interface InfraccionService {
             @WebParam(name = "codigoTipoInfraccion") String codigoTipoInfraccion
     );
 
+    @WebMethod
+    List<InfraccionPublica> consultaPublicaPorPlaca(
+            @WebParam(name = "placa") String placa
+    );
+
+    @WebMethod
+    InfraccionPublica consultaPublicaPorNumero(
+            @WebParam(name = "numeroInfraccion") String numeroInfraccion
+    );
     @WebMethod
     InfraccionDetalle anularInfraccion(
             @WebParam(name = "numeroInfraccion") String numeroInfraccion

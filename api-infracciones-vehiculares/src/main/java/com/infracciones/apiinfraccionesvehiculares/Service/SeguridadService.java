@@ -36,7 +36,7 @@ public class SeguridadService {
     public Sesion requerirSesion() {
         return sesionService.validar(tokenActual())
                 .orElseThrow(() -> new NoAutenticadoException(
-                        "Debe iniciar sesión (header Authorization: Bearer <token>)."));
+                        "Debe iniciar sesión para realizar esta operación."));
     }
 
     public Sesion requerirRol(String... rolesPermitidos) {

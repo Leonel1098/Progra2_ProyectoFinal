@@ -40,7 +40,10 @@ public class InfraccionServiceLayer {
     }
 
     public List<InfraccionDetalle> listByPlaca(String placa) {
-        return infraccionRepository.findByPlaca(placa);
+        if (placa == null || !vehiculoRepository.existsByPlaca(placa.trim())) {
+            throw new VehiculoNoEncontradoException("No existe un vehículo con placa: " + placa);
+        }
+        return infraccionRepository.findByPlaca(placa.trim());
     }
 
     public List<InfraccionDetalle> listByDpi(String dpi) {
