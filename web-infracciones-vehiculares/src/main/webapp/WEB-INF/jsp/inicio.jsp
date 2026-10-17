@@ -57,10 +57,16 @@
         </c:if>
 
         <c:if test="${sessionScope.usuarioSesion.nombreRol eq 'Agente' or sessionScope.usuarioSesion.nombreRol eq 'Admin'}">
-            <div class="opcion opcion-pendiente">
+            <a class="opcion" href="${pageContext.request.contextPath}/agente/infracciones/nueva">
                 <strong>📝 Registrar infracción</strong>
-                <span>Próximamente</span>
-            </div>
+                <span>Crear una boleta con los datos del vehículo y la infracción.</span>
+            </a>
+            <c:if test="${sessionScope.usuarioSesion.nombreRol eq 'Agente'}">
+                <a class="opcion" href="${pageContext.request.contextPath}/agente/operaciones">
+                    <strong>👥 Personas, vehículos y consultas</strong>
+                    <span>Crear y consultar personas y vehículos; buscar infracciones por placa, número o DPI.</span>
+                </a>
+            </c:if>
         </c:if>
 
         <c:if test="${sessionScope.usuarioSesion.nombreRol eq 'Admin'}">

@@ -12,6 +12,9 @@ spring.mvc.view.suffix=.jsp
 
 #CONSULTA INFRACCIONES INICIO
 soap.infracciones.url = http://localhost:8080/services/infracciones
+soap.tipos.url=http://localhost:8080/services/tipoinfracciones
+soap.personas.url=http://localhost:8080/services/personas
+soap.vehiculos.url=http://localhost:8080/services/vehiculos
 
 # Autenticación
 soap.auth.url=http://localhost:8080/services/auth

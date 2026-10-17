@@ -1,9 +1,12 @@
 package com.infracciones.web.controller;
 
+import com.infracciones.web.config.SesionAtributos;
 import com.infracciones.web.dto.response.InfraccionPublica;
+import com.infracciones.web.dto.response.SesionUsuario;
 import com.infracciones.web.service.ConsultaInfraccionService;
 import com.infracciones.web.service.ServicioInfraccionesException;
 import com.infracciones.web.service.SoapFaultException;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +29,11 @@ public class ConsultaController {
     }
 
     @GetMapping({"/", "/consulta"})
-    public String mostrarConsulta(Model model) {
+    public String mostrarConsulta(HttpSession sesion, Model model) {
+        String destino = redireccionSiAutenticado(sesion);
+        if (destino != null) {
+            return destino;
+        }
         model.addAttribute("tipoBusqueda", "PLACA");
         return "consulta";
     }
@@ -35,7 +42,13 @@ public class ConsultaController {
     public String consultar(@RequestParam(defaultValue = "PLACA") String tipoBusqueda,
                             @RequestParam(defaultValue = "P") String tipoPlaca,
                             @RequestParam(defaultValue = "") String valor,
+                            HttpSession sesion,
                             Model model) {
+
+        String destino = redireccionSiAutenticado(sesion);
+        if (destino != null) {
+            return destino;
+        }
 
         boolean porPlaca = !"INFRACCION".equals(tipoBusqueda);
         String limpio = valor.trim().toUpperCase();
@@ -80,5 +93,19 @@ public class ConsultaController {
         }
 
         return "consulta";
+    }
+
+    private String redireccionSiAutenticado(HttpSession sesion) {
+        Object atributo = sesion.getAttribute(SesionAtributos.USUARIO);
+        if (!(atributo instanceof SesionUsuario usuario)) {
+            return null;
+        }
+        if (usuario.haExpirado()) {
+            sesion.invalidate();
+            return null;
+        }
+        return usuario.tieneRol("Ciudadano")
+                ? "redirect:/ciudadano/infracciones"
+                : "redirect:/inicio";
     }
 }
