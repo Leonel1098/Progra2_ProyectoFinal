@@ -70,10 +70,10 @@
         </c:if>
 
         <c:if test="${sessionScope.usuarioSesion.nombreRol eq 'Admin'}">
-            <div class="opcion opcion-pendiente">
+            <a class="opcion" href="${pageContext.request.contextPath}/admin/infracciones">
                 <strong>⚙️ Administración</strong>
-                <span>Usuarios, tipos de infracción y reportes. Próximamente</span>
-            </div>
+                <span>Gestionar infracciones, personas, vehículos, tipos y usuarios.</span>
+            </a>
         </c:if>
     </div></main>
 
