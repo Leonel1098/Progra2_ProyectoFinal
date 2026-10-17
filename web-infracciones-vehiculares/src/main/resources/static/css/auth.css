@@ -1,0 +1,154 @@
+.auth-wrapper {
+    max-width: 460px;
+}
+
+.auth-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.auth-nav-back {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
+.auth-nav-back:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+@media (max-width: 560px) {
+    .auth-nav-actions {
+        gap: 0.4rem;
+    }
+
+    .auth-nav-actions .btn-login {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.78rem;
+    }
+
+    .auth-nav-back {
+        font-size: 0.75rem;
+    }
+}
+
+.campo {
+    margin-bottom: 1.1rem;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.campo input {
+    width: 100%;
+    padding: 0.8rem 0.9rem;
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text-main);
+    background: #ffffff;
+}
+
+.campo input:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.alert-error {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+.opciones {
+    display: grid;
+    gap: 1rem;
+}
+
+.opcion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1.1rem 1.25rem;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    color: var(--text-main);
+    text-decoration: none;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+}
+
+.opcion span {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+a.opcion:hover {
+    border-color: var(--primary-light);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+}
+
+.opcion-pendiente {
+    opacity: 0.6;
+}
+
+.navbar form {
+    margin: 0;
+}
+
+.navbar button.btn-login {
+    background: transparent;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.auth-select {
+    width: 100%;
+    padding: 0.8rem 0.9rem;
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text-main);
+    background: #ffffff;
+}
+
+.auth-search {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.auth-search h2 {
+    margin-top: 0;
+    font-size: 1.15rem;
+}
+
+.auth-search > p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.auth-switch {
+    margin: 1.25rem 1.5rem 1.5rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.auth-switch a {
+    color: var(--primary-light);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-switch a:hover {
+    text-decoration: underline;
+}

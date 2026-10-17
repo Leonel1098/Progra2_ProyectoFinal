@@ -1,0 +1,479 @@
+:root {
+    --primary: #102a71;
+    --primary-light: #2563eb;
+    --accent: #f59e0b;
+    --bg-page: #f1f5f9;
+    --card-bg: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.nav-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0.9rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text-main);
+}
+
+.brand-badge {
+    width: 40px;
+    height: 40px;
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 1.25rem;
+}
+
+.brand-title {
+    display: block;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1.2;
+}
+
+.brand-sub {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: #15803d;
+}
+
+.btn-login {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--primary);
+    border: 1.5px solid #cbd5e1;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.btn-login:hover {
+    background: #f8fafc;
+    border-color: var(--primary-light);
+    color: var(--primary-light);
+}
+
+/* MAIN WRAPPER */
+.main-wrapper {
+    max-width: 760px;
+    margin: 3.5rem auto 5rem;
+    padding: 0 1.25rem;
+}
+
+.hero-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.badge-tag {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary-light);
+    background: #eff6ff;
+    border-radius: 999px;
+    margin-bottom: 0.75rem;
+}
+
+.hero-section h1 {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+}
+
+.hero-section p {
+    color: var(--text-muted);
+    font-size: 0.98rem;
+}
+
+/* CARD DE CONSULTA */
+.card-consulta {
+    background: var(--card-bg);
+    border-radius: 18px;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    border: 1px solid #f1f5f9;
+    padding: 2rem;
+}
+
+/* TABS */
+.tab-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    background: #f1f5f9;
+    padding: 0.35rem;
+    border-radius: 12px;
+    margin-bottom: 1.75rem;
+}
+
+.tab-btn {
+    padding: 0.75rem;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+    background: #ffffff;
+    color: var(--primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* FORMULARIO */
+.field-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+}
+
+.field-header label {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.badge-req {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #b45309;
+}
+
+/* PLACA ESTILO MODERNO */
+/* CONTENEDOR INTERNO DE LA PLACA */
+.plate-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0;
+}
+
+.plate-type-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+/* SELECTOR P / M CON ESTILO INTEGRADO */
+.plate-type-select {
+    appearance: none;
+    background: #f1f5f9;
+    border: 2px solid #cbd5e1;
+    border-radius: 8px;
+    color: var(--primary);
+    font-family: 'Plus Jakarta Sans', monospace, sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    padding: 0.2rem 0.6rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.plate-type-select:hover,
+.plate-type-select:focus {
+    border-color: var(--primary-light);
+    outline: none;
+    background: #eff6ff;
+}
+
+.plate-separator {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.plate-input {
+    width: auto;
+    max-width: 260px;
+    border: 0;
+    outline: none;
+    text-align: left;
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--primary);
+    text-transform: uppercase;
+    font-family: 'Plus Jakarta Sans', monospace, sans-serif;
+}
+
+/* BOTON DE ACCIÓN */
+.btn-submit {
+    width: 100%;
+    padding: 0.95rem;
+    background: var(--primary);
+    color: #ffffff;
+    border: 0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 14px rgba(16, 42, 113, 0.25);
+    transition: all 0.2s;
+}
+
+.btn-submit:hover {
+    background: #0c2057;
+    transform: translateY(-1px);
+}
+
+/* MENSAJES Y PIE */
+.alert-box {
+    margin-top: 1.25rem;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    font-size: 0.9rem;
+    color: #1e3a8a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-footer {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* ==========================================================================
+   ESTILOS DE RESULTADOS DE CONSULTA
+   ========================================================================== */
+
+/* CASO SOLVENTE */
+.result-box {
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+}
+
+.result-badge-icon {
+    font-size: 2rem;
+}
+
+.result-details h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #166534;
+    margin-bottom: 0.2rem;
+}
+
+.result-details p {
+    font-size: 0.85rem;
+    color: #15803d;
+    margin: 0;
+}
+
+/* LISTADO DE INFRACCIONES */
+.infracciones-container {
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.infracciones-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.infracciones-header h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.count-badge {
+    background: #e2e8f0;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+}
+
+.infracciones-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.infraccion-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.infraccion-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.infraccion-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.boleta-tag {
+    font-weight: 800;
+    color: var(--primary);
+    font-size: 0.95rem;
+    margin-right: 0.5rem;
+}
+
+.infraccion-fecha {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* PILLS DE ESTADO */
+.status-pill {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.status-solvente, .status-pagada {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status-pendiente {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+/* DETALLES DE LA INFRACCIÓN */
+.infraccion-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 0.85rem;
+}
+
+.infraccion-motivo {
+    font-size: 0.85rem;
+    color: #334155;
+    line-height: 1.4;
+    flex: 1;
+}
+
+.infraccion-monto {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.monto-label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.monto-valor {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+/* BOTÓN DE PAGO */
+.infraccion-actions {
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 0.75rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-pagar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background: #15803d;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+}
+
+.btn-pagar:hover {
+    background: #166534;
+}

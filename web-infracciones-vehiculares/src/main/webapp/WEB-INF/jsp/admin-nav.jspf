@@ -1,0 +1,11 @@
+<aside class="hidden h-screen w-64 shrink-0 flex-col border-r border-slate-200 bg-white lg:sticky lg:top-0 lg:flex">
+    <div class="border-b p-5"><p class="text-xs font-bold uppercase tracking-wider text-brand-600">Movilidad &amp; Tr&aacute;nsito</p><h1 class="mt-1 font-extrabold">Panel Admin</h1></div>
+    <nav class="flex-1 space-y-1 p-3 text-sm">
+        <a class="flex items-center gap-2 rounded-xl px-3 py-2.5 ${activeTab eq 'infracciones' ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100'}" href="${pageContext.request.contextPath}/admin/infracciones">Infracciones</a>
+        <a class="flex items-center gap-2 rounded-xl px-3 py-2.5 ${activeTab eq 'personas' ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100'}" href="${pageContext.request.contextPath}/admin/personas">Personas</a>
+        <a class="flex items-center gap-2 rounded-xl px-3 py-2.5 ${activeTab eq 'vehiculos' ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100'}" href="${pageContext.request.contextPath}/admin/vehiculos">Veh&iacute;culos</a>
+        <a class="flex items-center gap-2 rounded-xl px-3 py-2.5 ${activeTab eq 'tipos' ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100'}" href="${pageContext.request.contextPath}/admin/tipos-infraccion">Tipos de infracci&oacute;n</a>
+        <a class="flex items-center gap-2 rounded-xl px-3 py-2.5 ${activeTab eq 'usuarios' ? 'bg-brand-700 text-white' : 'text-slate-600 hover:bg-slate-100'}" href="${pageContext.request.contextPath}/admin/usuarios">Usuarios y roles</a>
+    </nav>
+    <div class="border-t p-3"><a class="block rounded-xl px-3 py-2.5 text-sm text-slate-600 hover:bg-slate-100" href="${pageContext.request.contextPath}/inicio">&larr; Volver al inicio</a></div>
+</aside>
