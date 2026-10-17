@@ -11,8 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/consulta.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/auth.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pago.css">
 </head>
-<body>
+<body class="pago-page">
 
 <header class="navbar">
     <div class="nav-container">
@@ -42,8 +43,8 @@
         </c:if>
 
         <c:if test="${not empty pago}">
-            <div class="infraccion-card">
-                <div class="infraccion-body">
+            <div class="infraccion-card pago-card">
+                <div class="infraccion-body pago-body">
                     <p class="infraccion-motivo"><strong>Boleta:</strong> <c:out value="${pago.numeroInfraccion}"/></p>
                     <p class="infraccion-motivo"><strong>Monto inicial:</strong> Q <c:out value="${pago.montoInicial}"/></p>
                     <p class="infraccion-motivo"><strong>Descuento (<c:out value="${pago.porcentajeDescuento}"/>%):</strong> Q <c:out value="${pago.montoDescuento}"/></p>
@@ -61,7 +62,7 @@
         </c:if>
 
         <c:if test="${not empty comprobante}">
-            <div class="result-box result-success">
+            <div class="result-box result-success pago-result">
                 <div class="result-badge-icon">✅</div>
                 <div class="result-details">
                     <h3>Pago realizado</h3>

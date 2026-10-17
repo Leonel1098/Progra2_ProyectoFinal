@@ -1,0 +1,165 @@
+.pago-page {
+    overflow-x: hidden;
+}
+
+.pago-page .main-wrapper {
+    width: 100%;
+    max-width: 760px;
+    padding-inline: clamp(1rem, 4vw, 1.25rem);
+}
+
+.pago-page .card-consulta,
+.pago-page .pago-card,
+.pago-page .pago-result {
+    min-width: 0;
+    max-width: 100%;
+}
+
+.pago-page .pago-body {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 1rem;
+}
+
+.pago-page .pago-body .infraccion-motivo {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.pago-page .pago-body .infraccion-monto {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    min-width: 0;
+    padding-top: 0.85rem;
+    border-top: 1px dashed #e2e8f0;
+    text-align: left;
+    white-space: normal;
+}
+
+.pago-page .pago-body .monto-valor {
+    overflow-wrap: anywhere;
+}
+
+.pago-page .pago-card .infraccion-actions,
+.pago-page > main > .card-consulta > .infraccion-actions {
+    width: 100%;
+    min-width: 0;
+}
+
+.pago-page .pago-card .btn-pagar,
+.pago-page > main > .card-consulta > .infraccion-actions .btn-pagar {
+    max-width: 100%;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.pago-page .pago-result {
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.pago-page .pago-result .result-details {
+    flex: 1 1 12rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 560px) {
+    .pago-page .nav-container {
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .pago-page .brand {
+        min-width: 0;
+        gap: 0.5rem;
+    }
+
+    .pago-page .brand-badge {
+        flex: 0 0 2.25rem;
+        width: 2.25rem;
+        height: 2.25rem;
+        font-size: 1.1rem;
+    }
+
+    .pago-page .brand-text {
+        min-width: 0;
+    }
+
+    .pago-page .brand-title {
+        font-size: 0.9rem;
+        overflow-wrap: anywhere;
+    }
+
+    .pago-page .brand-sub {
+        font-size: 0.55rem;
+        letter-spacing: 0.04em;
+    }
+
+    .pago-page .btn-login {
+        flex: 0 0 auto;
+        max-width: 7.5rem;
+        padding: 0.5rem 0.65rem;
+        font-size: 0.75rem;
+        line-height: 1.2;
+        text-align: center;
+    }
+
+    .pago-page .main-wrapper {
+        margin-top: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .pago-page .hero-section {
+        margin-bottom: 1.25rem;
+    }
+
+    .pago-page .hero-section h1 {
+        font-size: clamp(1.65rem, 7vw, 2rem);
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+    }
+
+    .pago-page .card-consulta {
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    .pago-page .pago-card {
+        padding: 0.9rem;
+    }
+
+    .pago-page .pago-body {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0.75rem;
+    }
+
+    .pago-page .pago-body .infraccion-monto {
+        grid-column: auto;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .pago-page .pago-card .infraccion-actions,
+    .pago-page > main > .card-consulta > .infraccion-actions {
+        justify-content: stretch;
+    }
+
+    .pago-page .pago-card .btn-pagar,
+    .pago-page > main > .card-consulta > .infraccion-actions .btn-pagar {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .pago-page .pago-result {
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+}
