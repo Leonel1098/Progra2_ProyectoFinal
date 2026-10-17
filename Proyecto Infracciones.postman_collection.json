@@ -1,0 +1,1346 @@
+{
+  "info": {
+    "_postman_id": "b9f28249-6e7f-44d9-868d-c46c7c4de1ca",
+    "name": "Proyecto Infracciones",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "30638536"
+  },
+  "item": [
+    {
+      "name": "Tipo Infraccion",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:crearTipoInfraccion>\r\n            <codigo>INF-004</codigo>\r\n            <nombre>Semáforo en rojo</nombre>\r\n            <descripcion>Cruzar un semáforo en rojo</descripcion>\r\n            <monto>400.00</monto>\r\n        </tns:crearTipoInfraccion>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:listarTipoInfracciones/>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:eliminarTipoInfraccion>\r\n            <id>4</id>\r\n        </tns:eliminarTipoInfraccion>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "findByID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:consultarTipoInfraccionPorId>\r\n            <id>1</id>\r\n        </tns:consultarTipoInfraccionPorId>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "findByCode",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:consultarTipoInfraccionPorCodigo>\r\n            <codigo>INF-001</codigo>\r\n        </tns:consultarTipoInfraccionPorCodigo>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:actualizarTipoInfraccion>\r\n            <id>1</id>\r\n            <codigo>INF-001</codigo>\r\n            <nombre>Exceso de velocidad</nombre>\r\n            <descripcion>Conducir por encima del límite permitido en zona urbana</descripcion>\r\n            <monto>550.00</monto>\r\n        </tns:actualizarTipoInfraccion>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>"
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/tipoinfracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "tipoinfracciones"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Personas",
+      "item": [
+        {
+          "name": "Create",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:crearPersona>\r\n            <dpi>1234567890102</dpi>\r\n            <nombre>Jose</nombre>\r\n            <apellido>Pérez</apellido>\r\n            <telefono>55512345</telefono>\r\n            <direccion>Zona 5, Ciudad de Guatemala</direccion>\r\n        </tns:crearPersona>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/personas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "personas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List People",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:listarPersonas/>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/personas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "personas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find by DPI",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:consultarPersonaPorDpi>\r\n            <dpi>1234567890101</dpi>\r\n        </tns:consultarPersonaPorDpi>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>"
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/personas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "personas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Person",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:actualizarPersona>\r\n            <dpi>1234567890101</dpi>\r\n            <nombre>Juan Carlos</nombre>\r\n            <apellido>Pérez López</apellido>\r\n            <telefono>55599999</telefono>\r\n            <direccion>Zona 10, Ciudad de Guatemala</direccion>\r\n        </tns:actualizarPersona>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>"
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/personas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "personas"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Person",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope\r\n    xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n    <soapenv:Header/>\r\n    <soapenv:Body>\r\n        <tns:eliminarPersona>\r\n            <dpi>1234567890101</dpi>\r\n        </tns:eliminarPersona>\r\n    </soapenv:Body>\r\n</soapenv:Envelope>"
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/personas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "personas"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:crearUsuario>\r\n         <dpiPersona>1934567890101</dpiPersona>\r\n         <usuario>jalvarez</usuario>\r\n         <contrasena>MiClave123</contrasena>\r\n         <nombreRol>Ciudadano</nombreRol>\r\n         <estado>false</estado>\r\n      </tns:crearUsuario>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/usuarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Users",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "S8l8FLMj1F0mWZOzCiSsy4QyIJryUfWUJHwRLPbqP8Y",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:listarUsuarios/>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/usuarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find by Username",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:consultarUsuarioPorUsername>\r\n         <usuario>jperez</usuario>\r\n      </tns:consultarUsuarioPorUsername>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/usuarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:actualizarUsuario>\r\n         <usuario>jperez</usuario>\r\n         <nombreRol>Admin</nombreRol>\r\n         <estado>false</estado>\r\n      </tns:actualizarUsuario>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/usuarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Password",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:cambiarContrasena>\r\n         <usuario>jperez</usuario>\r\n         <nuevaContrasena>NuevaClave456</nuevaContrasena>\r\n      </tns:cambiarContrasena>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/usuarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml; charset=UTF-8",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:eliminarUsuario>\r\n         <usuario>jperez</usuario>\r\n      </tns:eliminarUsuario>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>"
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/usuarios",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Infracciones",
+      "item": [
+        {
+          "name": "Registrar Infraccion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:registrarInfraccion>\r\n         <numeroInfraccion>INFR-0001</numeroInfraccion>\r\n         <fechaInfraccion>2026-10-13</fechaInfraccion>\r\n         <direccionInfraccion>Zona 10, Ciudad de Guatemala</direccionInfraccion>\r\n         <dpiPersona>1234567890101</dpiPersona>\r\n         <placaVehiculo>P123ABC</placaVehiculo>\r\n         <usuarioAgente>jperez</usuarioAgente>\r\n         <codigoTipoInfraccion>INF-001</codigoTipoInfraccion>\r\n      </tns:registrarInfraccion>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/infracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "infracciones"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar todas",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:listarInfracciones/>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/infracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "infracciones"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/infracciones' --header 'Content-Type: text/xml' --header 'charset: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:listarInfracciones/>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar por número",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:consultarPorNumero>\n         <numeroInfraccion>INFR-0001</numeroInfraccion>\n      </tns:consultarPorNumero>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/infracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "infracciones"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/infracciones' --header 'Content-Type: text/xml' --header 'charset: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:consultarPorNumero>\n         <numeroInfraccion>INFR-0001</numeroInfraccion>\n      </tns:consultarPorNumero>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar por placa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:consultarPorPlaca>\n         <placa>P123ABC</placa>\n      </tns:consultarPorPlaca>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/infracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "infracciones"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/infracciones' --header 'Content-Type: text/xml' --header 'charset: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:consultarPorPlaca>\n         <placa>P123ABC</placa>\n      </tns:consultarPorPlaca>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar por DPI",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:consultarPorDpi>\n         <dpi>1234567890101</dpi>\n      </tns:consultarPorDpi>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/infracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "infracciones"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/infracciones' --header 'Content-Type: text/xml' --header 'charset: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:consultarPorDpi>\n         <dpi>1234567890101</dpi>\n      </tns:consultarPorDpi>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        },
+        {
+          "name": "Anular",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:anularInfraccion>\n         <numeroInfraccion>INFR-0001</numeroInfraccion>\n      </tns:anularInfraccion>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/infracciones",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "infracciones"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/infracciones' --header 'Content-Type: text/xml' --header 'charset: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:anularInfraccion>\n         <numeroInfraccion>INFR-0001</numeroInfraccion>\n      </tns:anularInfraccion>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Vehiculos",
+      "item": [
+        {
+          "name": "Crear Vehiculo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:crearVehiculo>\r\n         <placa>P123ABC</placa>\r\n         <marca>Toyota</marca>\r\n         <modelo>Corolla 2020</modelo>\r\n         <color>Rojo</color>\r\n      </tns:crearVehiculo>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/vehiculos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "vehiculos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar vehículos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:listarVehiculos/>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/vehiculos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "vehiculos"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/vehiculos' --header 'Content-Type: text/xml' --header 'charset: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:listarVehiculos/>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar por placa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:consultarVehiculoPorPlaca>\n         <placa>P123ABC</placa>\n      </tns:consultarVehiculoPorPlaca>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/vehiculos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "vehiculos"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/vehiculos' --header 'Content-Type: text/xml' --header 'charset: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:consultarVehiculoPorPlaca>\n         <placa>P123ABC</placa>\n      </tns:consultarVehiculoPorPlaca>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar vehículo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:actualizarVehiculo>\n         <placa>P123ABC</placa>\n         <marca>Honda</marca>\n         <modelo>Civic 2022</modelo>\n         <color>Azul</color>\n      </tns:actualizarVehiculo>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/vehiculos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "vehiculos"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/vehiculos' --header 'Content-Type: text/xml' --header 'charset: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:actualizarVehiculo>\n         <placa>P123ABC</placa>\n         <marca>Honda</marca>\n         <modelo>Civic 2022</modelo>\n         <color>Azul</color>\n      </tns:actualizarVehiculo>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar vehículo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:eliminarVehiculo>\n         <placa>P123ABC</placa>\n      </tns:eliminarVehiculo>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/vehiculos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "vehiculos"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/vehiculos' --header 'Content-Type: text/xml' --header 'charset: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:eliminarVehiculo>\n         <placa>P123ABC</placa>\n      </tns:eliminarVehiculo>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pago Infracciones",
+      "item": [
+        {
+          "name": "Calcular Monto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "chase",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:calcularMontoAPagar>\r\n         <numeroInfraccion>INFR-0001</numeroInfraccion>\r\n      </tns:calcularMontoAPagar>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/pagos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "pagos"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Aplicar pago",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "chase",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:aplicarPago>\n         <numeroInfraccion>INFR-0001</numeroInfraccion>\n      </tns:aplicarPago>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/pagos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "pagos"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/pagos' --header 'Content-Type: text/xml' --header 'chase: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:aplicarPago>\n         <numeroInfraccion>INFR-0001</numeroInfraccion>\n      </tns:aplicarPago>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        },
+        {
+          "name": "Consultar pago por infracción",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "chase",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:consultarPagoPorInfraccion>\n         <numeroInfraccion>INFR-0001</numeroInfraccion>\n      </tns:consultarPagoPorInfraccion>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/pagos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "pagos"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/pagos' --header 'Content-Type: text/xml' --header 'chase: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:consultarPagoPorInfraccion>\n         <numeroInfraccion>INFR-0001</numeroInfraccion>\n      </tns:consultarPagoPorInfraccion>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        },
+        {
+          "name": "Listar pagos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "chase",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:listarPagos/>\n   </soapenv:Body>\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/pagos",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "pagos"
+              ]
+            },
+            "description": "Generated from cURL: curl --request POST --url 'http://localhost:8080/services/pagos' --header 'Content-Type: text/xml' --header 'chase: UTF-8' --data-raw '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\n   <soapenv:Body>\n      <tns:listarPagos/>\n   </soapenv:Body>\n</soapenv:Envelope>'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Autenticación de Usuario",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:login>\r\n         <usuario>jperez</usuario>\r\n         <contrasena>MiClave123</contrasena>\r\n      </tns:login>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/auth",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "auth"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Registro de Cuenta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:registrarCuenta>\r\n         <dpiPersona>2222222222222</dpiPersona>\r\n         <nombre>Maria</nombre>\r\n         <apellido>Lopez</apellido>\r\n         <usuario>mlopez</usuario>\r\n         <contrasena>MiClave123</contrasena>\r\n      </tns:registrarCuenta>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/auth",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "auth"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Log out",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "S8l8FLMj1F0mWZOzCiSsy4QyIJryUfWUJHwRLPbqP8Y",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "text/xml"
+              },
+              {
+                "key": "charset",
+                "value": "UTF-8"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\"\r\n    xmlns:tns=\"https://soap.apiinfraccionesvehiculares.infracciones.com/\">\r\n   <soapenv:Body>\r\n      <tns:logout/>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+              "options": {
+                "raw": {
+                  "language": "xml"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/services/auth",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "services",
+                "auth"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
