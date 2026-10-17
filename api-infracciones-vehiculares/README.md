@@ -342,7 +342,7 @@ soap (endpoint SOAP) → Service (reglas de negocio) → Repository (SQL) → My
 
 ## 10. Servicios SOAP disponibles
 
-El backend publica **6 servicios SOAP**. Cada servicio tiene **una sola URL** y todas sus operaciones
+El backend publica **7 servicios SOAP**. Cada servicio tiene **una sola URL** y todas sus operaciones
 se invocan con `POST` a esa URL.
 
 | Servicio | URL del servicio (POST) | WSDL (contrato) | Qué administra |
@@ -353,6 +353,7 @@ se invocan con `POST` a esa URL.
 | Vehículos | `http://localhost:8080/services/vehiculos` | `...?wsdl` | Vehículos (identificados por placa) |
 | Infracciones | `http://localhost:8080/services/infracciones` | `...?wsdl` | Registro, consulta y anulación de infracciones |
 | Pagos | `http://localhost:8080/services/pagos` | `...?wsdl` | Cálculo y registro de pagos con descuento por pronto pago |
+| Autenticación | `http://localhost:8080/services/auth` | `...?wsdl` | Inicio de sesión, registro de cuenta ciudadana y cierre de sesión |
 
 ### 10.1 ¿Cómo sabe el backend qué operación ejecutar si la URL es la misma?
 
@@ -521,10 +522,12 @@ Es el servicio principal. **No hay eliminación**: las infracciones se **anulan*
 | Operación | Parámetros | Qué hace |
 |---|---|---|
 | `listarInfracciones` | — | Devuelve todas las infracciones (más recientes primero) |
-| `consultarPorNumero` | `numeroInfraccion` | Devuelve una infracción |
-| `consultarPorPlaca` | `placa` | Devuelve las infracciones de un vehículo |
-| `consultarPorDpi` | `dpi` | Devuelve las infracciones de una persona |
+| `consultarPorNumero` | `numeroInfraccion` | Devuelve una infracción (requiere sesión; el ciudadano solo accede a la suya) |
+| `consultarPorPlaca` | `placa` | Devuelve las infracciones de un vehículo (requiere sesión; para Ciudadano filtra por su DPI) |
+| `consultarPorDpi` | `dpi` | Devuelve las infracciones de una persona (requiere sesión; Ciudadano solo puede consultar su DPI) |
 | `registrarInfraccion` | `numeroInfraccion`, `fechaInfraccion`, `direccionInfraccion`, `dpiPersona`, `placaVehiculo`, `usuarioAgente`, `codigoTipoInfraccion` | Registra una infracción nueva |
+| `consultaPublicaPorPlaca` | `placa` | Consulta pública resumida; puede devolver infracciones de distintas personas asociadas a esa placa |
+| `consultaPublicaPorNumero` | `numeroInfraccion` | Consulta pública resumida por número de infracción |
 | `anularInfraccion` | `numeroInfraccion` | Cambia el estado a `Anulada` |
 
 **¿Qué devuelve cada infracción?** (objeto `InfraccionDetalle`, pensado para que el frontend no necesite
@@ -547,8 +550,9 @@ hacer varias consultas):
 
 1. Se valida que el número y la dirección no estén vacíos y que el **número no exista** ya.
 2. Si no se envía fecha, se usa la **fecha de hoy**.
-3. Se buscan los datos relacionados: persona (por DPI), vehículo (por placa), agente (por nombre de
-   usuario) y tipo de infracción (por código). Si alguno **no existe**, se devuelve un error claro.
+3. Se buscan los datos relacionados: persona (por DPI), vehículo (por placa), agente (por el usuario
+   asociado a la sesión autenticada) y tipo de infracción (por código). Si alguno **no existe**, se
+   devuelve un error claro.
 4. El **monto** se toma del tipo de infracción en la base de datos (**el cliente nunca envía el monto**).
 5. Se guarda con estado inicial **`Pendiente`**.
 6. Se devuelve la infracción completa ya registrada.
@@ -565,10 +569,19 @@ Ejemplo — registrar:
    <direccionInfraccion>Zona 10, Ciudad de Guatemala</direccionInfraccion>
    <dpiPersona>1234567890101</dpiPersona>
    <placaVehiculo>P123ABC</placaVehiculo>
-   <usuarioAgente>jperez</usuarioAgente>
+   <usuarioAgente>jperez</usuarioAgente> <!-- compatibilidad: el backend usa el usuario del token -->
    <codigoTipoInfraccion>INF-001</codigoTipoInfraccion>
 </tns:registrarInfraccion>
 ```
+
+Aunque el contrato SOAP conserva el parámetro `usuarioAgente`, el backend **lo ignora** al registrar.
+El `id_usuario` guardado es el del agente autenticado en el encabezado HTTP `Authorization: Bearer <token>`.
+Por eso, varias boletas creadas con la misma sesión de agente tendrán el mismo `id_usuario`, aunque
+correspondan a diferentes personas multadas (`id_persona`).
+
+Las consultas `consultaPublicaPorPlaca` y `consultaPublicaPorNumero` no requieren token y devuelven
+solo el resumen definido por `InfraccionPublica`. La búsqueda pública por placa puede incluir más de
+una persona. Para información completa se usan las consultas protegidas, sujetas a los permisos de rol.
 
 Ejemplos — consultar y anular:
 
@@ -579,6 +592,49 @@ Ejemplos — consultar y anular:
 <tns:anularInfraccion><numeroInfraccion>INFR-0001</numeroInfraccion></tns:anularInfraccion>
 <tns:listarInfracciones/>
 ```
+
+### 10.8 Servicio de autenticación — `/services/auth`
+
+El servicio permite iniciar sesión, registrar una cuenta ciudadana y cerrar una sesión. El registro
+no crea una persona: valida que ya exista por DPI y que su nombre y apellido coincidan. La persona
+puede crear entonces su propio usuario y contraseña; la cuenta recibe automáticamente el rol
+`Ciudadano`. Si ya tiene usuario asociado, no puede crear otra cuenta.
+
+| Operación | Parámetros | Requisito |
+|---|---|---|
+| `login` | `usuario`, `contrasena` | Público; devuelve token, usuario, rol, DPI, nombre y expiración |
+| `registrarCuenta` | `dpiPersona`, `nombre`, `apellido`, `usuario`, `contrasena` | Público; valida persona existente y crea una cuenta Ciudadano |
+| `logout` | — | Requiere el token de la sesión |
+
+Ejemplo — iniciar sesión:
+
+```xml
+<tns:login>
+   <usuario>jperez</usuario>
+   <contrasena>MiClave123</contrasena>
+</tns:login>
+```
+
+Las operaciones protegidas reciben el token en el **encabezado HTTP**, no como un campo del XML:
+
+```text
+Authorization: Bearer <token-devuelto-por-login>
+```
+
+El token identifica el usuario y su rol. Las sesiones duran 120 minutos por defecto y se pueden
+revocar con `logout`. Las contraseñas se almacenan con BCrypt.
+
+**Permisos principales:**
+
+| Rol | Acceso |
+|---|---|
+| `Admin` | Administración de usuarios, personas, vehículos y tipos; listado completo de infracciones y pagos; anulación de infracciones |
+| `Agente` | Registro de infracciones y gestión operativa de personas y vehículos |
+| `Ciudadano` | Consulta sus propias infracciones y puede calcular o realizar sus pagos |
+
+Las operaciones autenticadas de infracciones limitan al ciudadano a su DPI. Las operaciones de pago
+también verifican que la infracción pertenezca al ciudadano de la sesión. El resto de roles solo
+accede a las operaciones permitidas para su rol.
 
 ---
 
